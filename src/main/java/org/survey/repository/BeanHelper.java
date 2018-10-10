@@ -46,7 +46,7 @@ public class BeanHelper {
      * @param annotation
      *            Annotation which marks the field or getter.
      */
-    public static Object getValueOfAnnotatedField(Object object,
+    protected static Object getValueOfAnnotatedField(Object object,
             Class<? extends Annotation> annotation) {
         Preconditions.checkNotNull(object);
         Preconditions.checkNotNull(annotation);
