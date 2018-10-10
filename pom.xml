@@ -185,4 +185,14 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+    <distributionManagement>
+        <repository>
+            <id>packagecloud-markoniemi</id>
+            <url>packagecloud+https://packagecloud.io/markoniemi/maven-repo</url>
+        </repository>
+        <snapshotRepository>
+            <id>packagecloud-markoniemi</id>
+            <url>packagecloud+https://packagecloud.io/markoniemi/maven-repo</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>
