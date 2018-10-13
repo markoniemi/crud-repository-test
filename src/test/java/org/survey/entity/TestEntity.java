@@ -3,6 +3,7 @@ package org.survey.entity;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -22,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 @DiscriminatorColumn(name = "TYPE", discriminatorType = DiscriminatorType.STRING)
 public class TestEntity {
     @Id
+    @GeneratedValue
     @NonNull
     private String username;
 }

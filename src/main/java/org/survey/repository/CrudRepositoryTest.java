@@ -70,7 +70,7 @@ public abstract class CrudRepositoryTest<T, ID extends Serializable> {
         for (int i = 0; i < ENTITY_COUNT; i++) {
             T foundEntity = getEntityRepository().findOne((ID) BeanHelper.getId(savedEntities.get(i)));
             T updatedEntity = entityFactory.getUpdatedEntity(foundEntity);
-            BeanHelper.setValueOfAnnotatedField(updatedEntity, Id.class, (ID) BeanHelper.getId(foundEntity));
+            BeanHelper.setGeneratedValue(updatedEntity,  (ID) BeanHelper.getId(foundEntity));
             getEntityRepository().save(updatedEntity);
             foundEntity = getEntityRepository().findOne((ID) BeanHelper.getId(savedEntities.get(i)));
             assertEntity(updatedEntity, foundEntity);

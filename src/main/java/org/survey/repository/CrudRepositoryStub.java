@@ -1,6 +1,7 @@
 package org.survey.repository;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,7 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-import com.google.common.collect.Lists;
 
 public class CrudRepositoryStub<T, ID extends Serializable> implements PagingAndSortingRepository<T, ID> {
     protected Set<T> entities = new HashSet<T>();
@@ -116,12 +116,12 @@ public class CrudRepositoryStub<T, ID extends Serializable> implements PagingAnd
 
     @SuppressWarnings("unchecked")
     ID getId(T entity) {
-        return (ID) BeanHelper.getValueOfAnnotatedField(entity, Id.class);
+        return (ID) BeanHelper.getId(entity);
     }
 
     @SuppressWarnings("unchecked")
     void generateId(T entity) {
-        BeanHelper.setValueOfAnnotatedField(entity, GeneratedValue.class, (ID) generatedId);
+        BeanHelper.setGeneratedValue(entity, (ID) generatedId);
         generatedId++;
     }
 
@@ -132,6 +132,6 @@ public class CrudRepositoryStub<T, ID extends Serializable> implements PagingAnd
 
     @Override
     public Page<T> findAll(Pageable pageable) {
-        return new PageImpl<T>(Lists.newArrayList(findAll()));
+        return new PageImpl<T>(IteratorUtils.toList(findAll().iterator()));
     }
 }
