@@ -55,6 +55,7 @@ public class BeanHelper {
      * @param annotation
      *            Annotation which marks the field or getter.
      */
+    @SuppressWarnings("squid:S1751")
     private static Object getValueOfAnnotatedField(Object object, Class<? extends Annotation> annotation) {
         try {
             Field[] fields = FieldUtils.getFieldsWithAnnotation(object.getClass(), annotation);
