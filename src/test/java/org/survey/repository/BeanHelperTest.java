@@ -1,17 +1,10 @@
 package org.survey.repository;
 
-import java.lang.reflect.Method;
-
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-
 import org.junit.Assert;
 import org.junit.Test;
-import org.survey.entity.EntityWithAnnotationInPrivateMethod;
 import org.survey.entity.EntityWithAnnotationInWrongMethod;
 import org.survey.entity.TestEntityWithAnnotatedField;
 import org.survey.entity.TestEntityWithAnnotatedGetter;
-import org.survey.entity.TestEntityWithGeneratedId;
 import org.survey.entity.TestEntityWithNoAnnotation;
 
 public class BeanHelperTest {
