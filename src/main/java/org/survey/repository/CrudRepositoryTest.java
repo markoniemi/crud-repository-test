@@ -21,8 +21,8 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 public abstract class CrudRepositoryTest<T, ID extends Serializable> {
     protected static int ENTITY_COUNT = 5;
-    protected List<T> orginalEntities = new ArrayList<T>();;
-    protected List<T> savedEntities = new ArrayList<T>();;
+    protected List<T> orginalEntities = new ArrayList<T>();
+    protected List<T> savedEntities = new ArrayList<T>();
     protected PagingAndSortingRepository<T, ID> entityRepository;
     protected EntityFactory<T, ID> entityFactory;
     protected EntityComparator<T, ID> entityComparator;

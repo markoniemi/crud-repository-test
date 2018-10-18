@@ -15,6 +15,6 @@ public class TestEntityComparator extends EntityComparator<TestEntity, String> {
         if (entity2 == null) {
             return 1;
         }
-        return new CompareToBuilder().append(entity1.getUsername(), entity2.getUsername()).toComparison();
+        return new CompareToBuilder().append(entity1.getId(), entity2.getId()).append(entity1.getUsername(), entity2.getUsername()).toComparison();
     }
 }

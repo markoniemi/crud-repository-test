@@ -10,10 +10,10 @@ public class CrudRepositoryStubTest {
     @Test
     public void getId() {
         CrudRepositoryStub<TestEntity, String> userRepositoryStub = new CrudRepositoryStub<TestEntity, String>();
-        TestEntity testEntity = new TestEntity("username1");
-        Assert.assertEquals("username1", userRepositoryStub.getId(testEntity));
-        testEntity = new TestEntity("username2");
-        Assert.assertEquals("username2", userRepositoryStub.getId(testEntity));
+        TestEntity testEntity = new TestEntity(1L,"username1");
+        Assert.assertEquals(1L, userRepositoryStub.getId(testEntity));
+        testEntity = new TestEntity(2L,"username2");
+        Assert.assertEquals(2L, userRepositoryStub.getId(testEntity));
     }
 
     @Test
