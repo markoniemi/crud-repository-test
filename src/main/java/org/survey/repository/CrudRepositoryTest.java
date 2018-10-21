@@ -84,6 +84,17 @@ public abstract class CrudRepositoryTest<T, ID extends Serializable> {
         List<T> entities = IteratorUtils.toList(getEntityRepository().findAll().iterator());
         Assert.assertEquals(ENTITY_COUNT, entities.size());
     }
+    @Test
+    public void findAllWithIds() {
+        save();
+        List<ID> ids=new ArrayList<>();
+        for(T entity:savedEntities) {
+            ids.add((ID) BeanHelper.getId(entity));
+        }
+        @SuppressWarnings("unchecked")
+        List<T> entities = IteratorUtils.toList(getEntityRepository().findAll(ids).iterator());
+        Assert.assertEquals(ENTITY_COUNT, entities.size());
+    }
     @Ignore
     @Test
     public void findAllWithSort() {
@@ -127,7 +138,6 @@ public abstract class CrudRepositoryTest<T, ID extends Serializable> {
         // Assert.assertFalse(entityRepository.exists((ID) new Object()));
     }
 
-//    @Test(expected=IllegalArgumentException.class)
     @Test(expected=InvalidDataAccessApiUsageException.class)
     public void existsWithNull() {
         Assert.assertFalse(getEntityRepository().exists(null));

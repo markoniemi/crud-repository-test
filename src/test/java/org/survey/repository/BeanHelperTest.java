@@ -3,6 +3,7 @@ package org.survey.repository;
 import org.junit.Assert;
 import org.junit.Test;
 import org.survey.entity.EntityWithAnnotationInWrongMethod;
+import org.survey.entity.TestChildEntity;
 import org.survey.entity.TestEntityWithAnnotatedField;
 import org.survey.entity.TestEntityWithAnnotatedGetter;
 import org.survey.entity.TestEntityWithNoAnnotation;
@@ -14,6 +15,12 @@ public class BeanHelperTest {
         TestEntityWithAnnotatedField testEntity = new TestEntityWithAnnotatedField();
         testEntity.setUsername("username1");
         Assert.assertEquals("username1", BeanHelper.getId(testEntity));
+    }
+    @Test
+    public void getIdFromTestChildEntity() {
+        TestChildEntity testEntity = new TestChildEntity("username1");
+        testEntity.setId(1L);
+        Assert.assertEquals(1L, BeanHelper.getId(testEntity));
     }
 
     @Test
@@ -35,6 +42,12 @@ public class BeanHelperTest {
         TestEntityWithAnnotatedField testEntity = new TestEntityWithAnnotatedField();
         BeanHelper.setGeneratedValue(testEntity, "username1");
         Assert.assertEquals("username1", testEntity.getUsername());
+    }
+    @Test
+    public void setGeneratedValueToTestChildEntity() {
+        TestChildEntity testEntity = new TestChildEntity("");
+        BeanHelper.setGeneratedValue(testEntity, 1L);
+        Assert.assertEquals(Long.valueOf(1L), testEntity.getId());
     }
 
     @Test
