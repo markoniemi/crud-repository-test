@@ -1,12 +1,8 @@
 package org.survey.repository;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 
 import org.apache.commons.collections.IteratorUtils;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
@@ -18,7 +14,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 
 public class CrudRepositoryStub<T, ID extends Serializable> implements PagingAndSortingRepository<T, ID> {
-    protected Set<T> entities = new HashSet<T>();
+    protected Set<T> entities = new HashSet<>();
     protected Long generatedId = Long.valueOf(1);
 
     @Override
@@ -42,7 +38,6 @@ public class CrudRepositoryStub<T, ID extends Serializable> implements PagingAnd
             }
             this.entities.add(entity);
         }
-//        this.entities.addAll(entities.iterator());
         return entityList;
     }
 
@@ -64,7 +59,7 @@ public class CrudRepositoryStub<T, ID extends Serializable> implements PagingAnd
 
     @Override
     public Iterable<T> findAll(Iterable<ID> ids) {
-        Set<T> foundEntities = new HashSet<T>();
+        Set<T> foundEntities = new HashSet<>();
         for (ID id : ids) {
             foundEntities.add(findOne(id));
         }
@@ -132,6 +127,6 @@ public class CrudRepositoryStub<T, ID extends Serializable> implements PagingAnd
 
     @Override
     public Page<T> findAll(Pageable pageable) {
-        return new PageImpl<T>(IteratorUtils.toList(findAll().iterator()));
+        return new PageImpl<>(IteratorUtils.toList(findAll().iterator()));
     }
 }

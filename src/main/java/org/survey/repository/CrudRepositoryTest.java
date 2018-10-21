@@ -5,8 +5,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Id;
-
 import org.apache.commons.collections.IteratorUtils;
 import org.dbunit.DatabaseUnitException;
 import org.junit.After;
@@ -16,13 +14,12 @@ import org.junit.Test;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 public abstract class CrudRepositoryTest<T, ID extends Serializable> {
-    protected static int ENTITY_COUNT = 5;
-    protected List<T> orginalEntities = new ArrayList<T>();
-    protected List<T> savedEntities = new ArrayList<T>();
+    protected static final int ENTITY_COUNT = 5;
+    protected List<T> orginalEntities = new ArrayList<>();
+    protected List<T> savedEntities = new ArrayList<>();
     protected PagingAndSortingRepository<T, ID> entityRepository;
     protected EntityFactory<T, ID> entityFactory;
     protected EntityComparator<T, ID> entityComparator;
@@ -49,7 +46,7 @@ public abstract class CrudRepositoryTest<T, ID extends Serializable> {
     @SuppressWarnings("unchecked")
     public void save2() {
         orginalEntities = entityFactory.getEntities(ENTITY_COUNT);
-        List<T> entitiesToSave = new ArrayList<T>();
+        List<T> entitiesToSave = new ArrayList<>();
         for (int i = 0; i < ENTITY_COUNT; i++) {
             T originalEntity = orginalEntities.get(i);
             entitiesToSave.add(originalEntity);
@@ -165,7 +162,7 @@ public abstract class CrudRepositoryTest<T, ID extends Serializable> {
     @Test
     public void delete2() {
         save();
-        List<T> entitiesToDelete = new ArrayList<T>();
+        List<T> entitiesToDelete = new ArrayList<>();
         for (int i = 0; i < ENTITY_COUNT; i++) {
             T originalEntity = orginalEntities.get(i);
             entitiesToDelete.add(originalEntity);

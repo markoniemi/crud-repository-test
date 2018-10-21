@@ -1,7 +1,6 @@
 package org.survey.repository;
 
 import org.junit.Before;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.survey.entity.TestEntity;
 import org.survey.entity.TestEntityComparator;

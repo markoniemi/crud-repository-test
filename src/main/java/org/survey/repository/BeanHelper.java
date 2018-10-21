@@ -34,6 +34,7 @@ public class BeanHelper {
     public static Object getId(Object object) {
         return getValueOfAnnotatedField(object, Id.class);
     }
+
     /**
      * Return a value of a field from object which is a field marked with @Id
      * annotation.
@@ -42,7 +43,7 @@ public class BeanHelper {
      *            Object from which to read the value.
      */
     public static void setGeneratedValue(Object object, Object value) {
-        setValueOfAnnotatedField(object, GeneratedValue.class,value);
+        setValueOfAnnotatedField(object, GeneratedValue.class, value);
     }
 
     /**
@@ -58,24 +59,18 @@ public class BeanHelper {
     @SuppressWarnings("squid:S1751")
     private static Object getValueOfAnnotatedField(Object object, Class<? extends Annotation> annotation) {
         try {
-            Field[] fields = FieldUtils.getFieldsWithAnnotation(object.getClass(), annotation);
-            for (Field field : fields) {
+            for (Field field : FieldUtils.getFieldsWithAnnotation(object.getClass(), annotation)) {
                 return PropertyUtils.getProperty(object, field.getName());
             }
-            Method[] methods = MethodUtils.getMethodsWithAnnotation(object.getClass(), annotation);
-            {
-                for (Method method : methods) {
-                    if (isGetter(method)) {
-                        return method.invoke(object);
-                    }
+            for (Method method : MethodUtils.getMethodsWithAnnotation(object.getClass(), annotation)) {
+                if (isGetter(method)) {
+                    return method.invoke(object);
                 }
             }
         } catch (Exception e) {
         }
         return null;
     }
-    
-    
 
     /**
      * Set the value of a field from object, which is marked with a given
@@ -91,16 +86,12 @@ public class BeanHelper {
      */
     private static void setValueOfAnnotatedField(Object object, Class<? extends Annotation> annotation, Object value) {
         try {
-            Field[] fields = FieldUtils.getFieldsWithAnnotation(object.getClass(), annotation);
-            for (Field field : fields) {
+            for (Field field : FieldUtils.getFieldsWithAnnotation(object.getClass(), annotation)) {
                 PropertyUtils.setProperty(object, field.getName(), value);
             }
-            Method[] methods = MethodUtils.getMethodsWithAnnotation(object.getClass(), annotation);
-            {
-                for (Method method : methods) {
-                    if (isSetter(method)) {
-                        method.invoke(object, value);
-                    }
+            for (Method method : MethodUtils.getMethodsWithAnnotation(object.getClass(), annotation)) {
+                if (isSetter(method)) {
+                    method.invoke(object, value);
                 }
             }
         } catch (Exception e) {
