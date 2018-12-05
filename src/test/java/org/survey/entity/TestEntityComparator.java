@@ -3,7 +3,7 @@ package org.survey.entity;
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.survey.repository.EntityComparator;
 
-public class TestEntityComparator extends EntityComparator<TestEntity, String> {
+public class TestEntityComparator extends EntityComparator<TestEntity, Long> {
     @Override
     public int compare(TestEntity entity1, TestEntity entity2) {
         if (entity1 == entity2) {

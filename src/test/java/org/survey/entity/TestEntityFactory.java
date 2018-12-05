@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.survey.repository.EntityFactory;
 
-public class TestEntityFactory implements EntityFactory<TestEntity, String> {
+public class TestEntityFactory implements EntityFactory<TestEntity, Long> {
     @Override
     public List<TestEntity> getEntities(int count) {
         List<TestEntity> entities = new ArrayList<TestEntity>();

@@ -6,7 +6,7 @@ import org.survey.entity.TestEntity;
 import org.survey.entity.TestEntityComparator;
 import org.survey.entity.TestEntityFactory;
 
-public class TestEntityRepositoryTest extends CrudRepositoryTest<TestEntity, String> {
+public class TestEntityRepositoryTest extends CrudRepositoryTest<TestEntity, Long> {
     TestEntityRepository entityRepository = new TestEntityRepository();
 
     @Before
@@ -16,7 +16,7 @@ public class TestEntityRepositoryTest extends CrudRepositoryTest<TestEntity, Str
     }
 
     @Override
-    public PagingAndSortingRepository<TestEntity, String> getEntityRepository() {
+    public PagingAndSortingRepository<TestEntity, Long> getEntityRepository() {
         return entityRepository;
     }
 }

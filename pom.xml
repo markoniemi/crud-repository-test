@@ -11,13 +11,14 @@
         <tag>HEAD</tag>
     </scm>
     <properties>
-        <spring.boot.version>1.5.16.RELEASE</spring.boot.version>
+        <spring.boot.version>2.1.1.RELEASE</spring.boot.version>
         <junit.version>4.12</junit.version>
     </properties>
     <dependencies>
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
+            <version>1.9.3</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.data</groupId>

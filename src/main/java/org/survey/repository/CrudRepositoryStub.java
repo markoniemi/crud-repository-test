@@ -2,6 +2,7 @@ package org.survey.repository;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.apache.commons.collections.IteratorUtils;
@@ -30,7 +31,7 @@ public class CrudRepositoryStub<T, ID extends Serializable> implements PagingAnd
 
     @SuppressWarnings("unchecked")
     @Override
-    public <S extends T> Iterable<S> save(Iterable<S> entities) {
+    public <S extends T> Iterable<S> saveAll(Iterable<S> entities) {
         Iterable<S> entityList = IteratorUtils.toList(entities.iterator());
         for (T entity : entityList) {
             if (getId(entity) == null) {
@@ -42,7 +43,7 @@ public class CrudRepositoryStub<T, ID extends Serializable> implements PagingAnd
     }
 
     @Override
-    public T findOne(ID id) {
+    public Optional<T> findById(ID id) {
         if (entities.isEmpty()) {
             return null;
         }
@@ -51,27 +52,27 @@ public class CrudRepositoryStub<T, ID extends Serializable> implements PagingAnd
         }
         for (T entity : entities) {
             if (id.equals(getId(entity))) {
-                return entity;
+                return Optional.of(entity);
             }
         }
         return null;
     }
 
     @Override
-    public Iterable<T> findAll(Iterable<ID> ids) {
+    public Iterable<T> findAllById(Iterable<ID> ids) {
         Set<T> foundEntities = new HashSet<>();
         for (ID id : ids) {
-            foundEntities.add(findOne(id));
+            foundEntities.add(findById(id).get());
         }
         return foundEntities;
     }
 
     @Override
-    public boolean exists(ID id) {
+    public boolean existsById(ID id) {
         if (id == null) {
             throw new InvalidDataAccessApiUsageException("The given id must not be null");
         }
-        return findOne(id) != null;
+        return findById(id) != null;
     }
 
     @Override
@@ -85,22 +86,23 @@ public class CrudRepositoryStub<T, ID extends Serializable> implements PagingAnd
     }
 
     @Override
-    public void delete(ID id) {
-        T entity = findOne(id);
-        if (entity != null) {
+    public void deleteById(ID id) {
+//        entities.remove(findById(id));
+        Optional<T> entity = findById(id);
+        if (entity.isPresent()) {
             entities.remove(entity);
         }
     }
 
     @Override
     public void delete(T entity) {
-        if (exists(getId(entity))) {
+        if (existsById(getId(entity))) {
             entities.remove(entity);
         }
     }
 
     @Override
-    public void delete(Iterable<? extends T> entities) {
+    public void deleteAll(Iterable<? extends T> entities) {
         this.entities.removeAll(IteratorUtils.toList(entities.iterator()));
     }
 
