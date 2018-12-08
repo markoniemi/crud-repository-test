@@ -1,7 +1,9 @@
 package org.survey.repository;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -12,7 +14,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.PagingAndSortingRepository;
-
 
 public class CrudRepositoryStub<T, ID extends Serializable> implements PagingAndSortingRepository<T, ID> {
     protected Set<T> entities = new HashSet<>();
@@ -29,50 +30,44 @@ public class CrudRepositoryStub<T, ID extends Serializable> implements PagingAnd
         return entity;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public <S extends T> Iterable<S> saveAll(Iterable<S> entities) {
-        Iterable<S> entityList = IteratorUtils.toList(entities.iterator());
-        for (T entity : entityList) {
-            if (getId(entity) == null) {
-                generateId(entity);
-            }
-            this.entities.add(entity);
+        List<S> savedEntities = new ArrayList<>();
+        for (S entity : entities) {
+            savedEntities.add(save(entity));
         }
-        return entityList;
+        return savedEntities;
     }
 
     @Override
     public Optional<T> findById(ID id) {
-        if (entities.isEmpty()) {
-            return null;
-        }
-        if (id == null) {
-            return null;
-        }
         for (T entity : entities) {
             if (id.equals(getId(entity))) {
                 return Optional.of(entity);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     @Override
     public Iterable<T> findAllById(Iterable<ID> ids) {
         Set<T> foundEntities = new HashSet<>();
         for (ID id : ids) {
-            foundEntities.add(findById(id).get());
+            Optional<T> entity = findById(id);
+            if (entity.isPresent()) {
+                foundEntities.add(entity.get());
+            }
         }
         return foundEntities;
     }
 
     @Override
     public boolean existsById(ID id) {
+        // JPA throws an exception when existById is call with null
         if (id == null) {
             throw new InvalidDataAccessApiUsageException("The given id must not be null");
         }
-        return findById(id) != null;
+        return findById(id).isPresent();
     }
 
     @Override
@@ -87,7 +82,6 @@ public class CrudRepositoryStub<T, ID extends Serializable> implements PagingAnd
 
     @Override
     public void deleteById(ID id) {
-//        entities.remove(findById(id));
         Optional<T> entity = findById(id);
         if (entity.isPresent()) {
             entities.remove(entity);
@@ -103,7 +97,9 @@ public class CrudRepositoryStub<T, ID extends Serializable> implements PagingAnd
 
     @Override
     public void deleteAll(Iterable<? extends T> entities) {
-        this.entities.removeAll(IteratorUtils.toList(entities.iterator()));
+        for (T entity : entities) {
+            delete(entity);
+        }
     }
 
     @Override
@@ -112,12 +108,12 @@ public class CrudRepositoryStub<T, ID extends Serializable> implements PagingAnd
     }
 
     @SuppressWarnings("unchecked")
-    ID getId(T entity) {
+    protected ID getId(T entity) {
         return (ID) BeanHelper.getId(entity);
     }
 
     @SuppressWarnings("unchecked")
-    void generateId(T entity) {
+    protected void generateId(T entity) {
         BeanHelper.setGeneratedValue(entity, (ID) generatedId);
         generatedId++;
     }
