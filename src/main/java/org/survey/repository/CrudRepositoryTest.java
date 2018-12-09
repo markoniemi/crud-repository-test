@@ -1,12 +1,11 @@
 package org.survey.repository;
 
 import java.io.Serializable;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.commons.collections.IteratorUtils;
-import org.dbunit.DatabaseUnitException;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -44,7 +43,7 @@ public abstract class CrudRepositoryTest<T, ID extends Serializable> {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void save2() {
+    public void saveAll() {
         orginalEntities = entityFactory.getEntities(ENTITY_COUNT);
         List<T> entitiesToSave = new ArrayList<>();
         for (int i = 0; i < ENTITY_COUNT; i++) {
@@ -55,8 +54,9 @@ public abstract class CrudRepositoryTest<T, ID extends Serializable> {
         Assert.assertEquals(ENTITY_COUNT, savedEntities.size());
         for (int i = 0; i < ENTITY_COUNT; i++) {
             assertEntity(orginalEntities.get(i), savedEntities.get(i));
-            T foundEntity = getEntityRepository().findById((ID) BeanHelper.getId(savedEntities.get(i))).get();
-            assertEntity(orginalEntities.get(i), foundEntity);
+            Optional<T> foundEntity = getEntityRepository().findById((ID) BeanHelper.getId(savedEntities.get(i)));
+            Assert.assertTrue(foundEntity.isPresent());
+            assertEntity(orginalEntities.get(i), foundEntity.get());
         }
     }
 
@@ -65,12 +65,14 @@ public abstract class CrudRepositoryTest<T, ID extends Serializable> {
     public void update() {
         save();
         for (int i = 0; i < ENTITY_COUNT; i++) {
-            T foundEntity = getEntityRepository().findById((ID) BeanHelper.getId(savedEntities.get(i))).get();
-            T updatedEntity = entityFactory.getUpdatedEntity(foundEntity);
-            BeanHelper.setGeneratedValue(updatedEntity,  (ID) BeanHelper.getId(foundEntity));
+            Optional<T> foundEntity = getEntityRepository().findById((ID) BeanHelper.getId(savedEntities.get(i)));
+            Assert.assertTrue(foundEntity.isPresent());
+            T updatedEntity = entityFactory.getUpdatedEntity(foundEntity.get());
+            BeanHelper.setGeneratedValue(updatedEntity,  (ID) BeanHelper.getId(foundEntity.get()));
             getEntityRepository().save(updatedEntity);
-            foundEntity = getEntityRepository().findById((ID) BeanHelper.getId(savedEntities.get(i))).get();
-            assertEntity(updatedEntity, foundEntity);
+            foundEntity = getEntityRepository().findById((ID) BeanHelper.getId(savedEntities.get(i)));
+            Assert.assertTrue(foundEntity.isPresent());
+            assertEntity(updatedEntity, foundEntity.get());
         }
     }
 
@@ -113,19 +115,20 @@ public abstract class CrudRepositoryTest<T, ID extends Serializable> {
 
     @SuppressWarnings("unchecked")
     @Test
-    public void findOne() {
+    public void findById() {
         save();
         for (int i = 0; i < ENTITY_COUNT; i++) {
             T originalEntity = orginalEntities.get(i);
-            T foundEntity = getEntityRepository().findById((ID) BeanHelper.getId(originalEntity)).get();
-            assertEntity(orginalEntities.get(i), foundEntity);
+            Optional<T> foundEntity = getEntityRepository().findById((ID) BeanHelper.getId(originalEntity));
+            Assert.assertTrue(foundEntity.isPresent());
+            assertEntity(orginalEntities.get(i), foundEntity.get());
         }
         // TODO how to test a non-existent entity?
     }
 
     @SuppressWarnings("unchecked")
     @Test
-    public void exists() {
+    public void existsById() {
         save();
         for (int i = 0; i < ENTITY_COUNT; i++) {
             T entity = orginalEntities.get(i);
@@ -136,7 +139,7 @@ public abstract class CrudRepositoryTest<T, ID extends Serializable> {
     }
 
     @Test(expected=InvalidDataAccessApiUsageException.class)
-    public void existsWithNull() {
+    public void existsByIdWithNull() {
         Assert.assertFalse(getEntityRepository().existsById(null));
     }
 
@@ -149,7 +152,7 @@ public abstract class CrudRepositoryTest<T, ID extends Serializable> {
     @SuppressWarnings("unchecked")
     @Test
     @Ignore
-    public void delete() {
+    public void deleteById() {
         save();
         for (int i = 0; i < ENTITY_COUNT; i++) {
             T entity = orginalEntities.get(i);
