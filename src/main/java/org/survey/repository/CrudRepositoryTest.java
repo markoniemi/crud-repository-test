@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
+@SuppressWarnings("squid:S3655")
 public abstract class CrudRepositoryTest<T, ID extends Serializable> {
     protected static final int ENTITY_COUNT = 5;
     protected List<T> orginalEntities = new ArrayList<>();
