@@ -84,7 +84,7 @@ public class CrudRepositoryStub<T, ID extends Serializable> implements PagingAnd
     public void deleteById(ID id) {
         Optional<T> entity = findById(id);
         if (entity.isPresent()) {
-            entities.remove(entity);
+            entities.remove(entity.get());
         }
     }
 
