@@ -42,7 +42,7 @@ public class CrudRepositoryStub<T, ID extends Serializable> implements PagingAnd
     @Override
     public Optional<T> findById(ID id) {
         for (T entity : entities) {
-            if (id.equals(getId(entity))) {
+            if (getId(entity).equals(id)) {
                 return Optional.of(entity);
             }
         }

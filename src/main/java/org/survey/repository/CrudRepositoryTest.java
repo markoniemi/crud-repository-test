@@ -69,7 +69,7 @@ public abstract class CrudRepositoryTest<T, ID extends Serializable> {
             Optional<T> foundEntity = getEntityRepository().findById((ID) BeanHelper.getId(savedEntities.get(i)));
             Assert.assertTrue(foundEntity.isPresent());
             T updatedEntity = entityFactory.getUpdatedEntity(foundEntity.get());
-            BeanHelper.setGeneratedValue(updatedEntity,  (ID) BeanHelper.getId(foundEntity.get()));
+            BeanHelper.setGeneratedValue(updatedEntity, (ID) BeanHelper.getId(foundEntity.get()));
             getEntityRepository().save(updatedEntity);
             foundEntity = getEntityRepository().findById((ID) BeanHelper.getId(savedEntities.get(i)));
             Assert.assertTrue(foundEntity.isPresent());
@@ -84,17 +84,28 @@ public abstract class CrudRepositoryTest<T, ID extends Serializable> {
         List<T> entities = IteratorUtils.toList(getEntityRepository().findAll().iterator());
         Assert.assertEquals(ENTITY_COUNT, entities.size());
     }
+
     @Test
-    public void findAllWithIds() {
+    public void findAllById() {
         save();
-        List<ID> ids=new ArrayList<>();
-        for(T entity:savedEntities) {
+        List<ID> ids = new ArrayList<>();
+        for (T entity : savedEntities) {
             ids.add((ID) BeanHelper.getId(entity));
         }
         @SuppressWarnings("unchecked")
         List<T> entities = IteratorUtils.toList(getEntityRepository().findAllById(ids).iterator());
         Assert.assertEquals(ENTITY_COUNT, entities.size());
     }
+
+    @Test
+    public void findAllByIdWithNonExistentId() {
+        save();
+        List<ID> ids = new ArrayList<>();
+        ids.add(null);
+        List<T> entities = IteratorUtils.toList(getEntityRepository().findAllById(ids).iterator());
+        Assert.assertEquals(0, entities.size());
+    }
+
     @Ignore
     @Test
     public void findAllWithSort() {
@@ -105,6 +116,7 @@ public abstract class CrudRepositoryTest<T, ID extends Serializable> {
         List<T> entities = IteratorUtils.toList(getEntityRepository().findAll(sort).iterator());
         Assert.assertEquals(ENTITY_COUNT, entities.size());
     }
+
     @Test
     public void findAllWithPageable() {
         save();
@@ -124,7 +136,13 @@ public abstract class CrudRepositoryTest<T, ID extends Serializable> {
             Assert.assertTrue(foundEntity.isPresent());
             assertEntity(orginalEntities.get(i), foundEntity.get());
         }
-        // TODO how to test a non-existent entity?
+    }
+
+    @Test
+    public void findByIdWithNonExistentId() {
+        save();
+        Optional<T> foundEntity = getEntityRepository().findById(null);
+        Assert.assertFalse(foundEntity.isPresent());
     }
 
     @SuppressWarnings("unchecked")
@@ -139,7 +157,7 @@ public abstract class CrudRepositoryTest<T, ID extends Serializable> {
         // Assert.assertFalse(entityRepository.exists((ID) new Object()));
     }
 
-    @Test(expected=InvalidDataAccessApiUsageException.class)
+    @Test(expected = InvalidDataAccessApiUsageException.class)
     public void existsByIdWithNull() {
         Assert.assertFalse(getEntityRepository().existsById(null));
     }
@@ -152,41 +170,29 @@ public abstract class CrudRepositoryTest<T, ID extends Serializable> {
 
     @SuppressWarnings("unchecked")
     @Test
-    @Ignore
     public void deleteById() {
         save();
         for (int i = 0; i < ENTITY_COUNT; i++) {
-            T entity = orginalEntities.get(i);
+            T entity = savedEntities.get(i);
             getEntityRepository().deleteById((ID) BeanHelper.getId(entity));
-            Iterable<T> all = getEntityRepository().findAll();
-            Long id = (Long) BeanHelper.getId(entity);
             Assert.assertFalse(getEntityRepository().existsById((ID) BeanHelper.getId(entity)));
         }
         Assert.assertEquals(0, getEntityRepository().count());
     }
-
-//    @SuppressWarnings("unchecked")
-//    @Test
-//    public void delete2() {
-//        save();
-//        List<T> entitiesToDelete = new ArrayList<>();
-//        for (int i = 0; i < ENTITY_COUNT; i++) {
-//            T originalEntity = orginalEntities.get(i);
-//            entitiesToDelete.add(originalEntity);
-//        }
-//        getEntityRepository().delete(entitiesToDelete);
-//        Assert.assertEquals(0, getEntityRepository().count());
-//        for (int i = 0; i < ENTITY_COUNT; i++) {
-//            T entity = orginalEntities.get(i);
-//            Assert.assertFalse(getEntityRepository().existsById((ID) BeanHelper.getId(entity)));
-//        }
-//    }
 
     @Test
     public void deleteAll() {
         save();
         getEntityRepository().deleteAll();
         @SuppressWarnings("unchecked")
+        List<T> entities = IteratorUtils.toList(getEntityRepository().findAll().iterator());
+        Assert.assertEquals(0, entities.size());
+    }
+
+    @Test
+    public void deleteAll2() {
+        save();
+        getEntityRepository().deleteAll(savedEntities);
         List<T> entities = IteratorUtils.toList(getEntityRepository().findAll().iterator());
         Assert.assertEquals(0, entities.size());
     }
