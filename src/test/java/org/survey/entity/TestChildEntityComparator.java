@@ -1,9 +1,10 @@
 package org.survey.entity;
 
-import org.apache.commons.lang3.builder.CompareToBuilder;
-import org.survey.repository.EntityComparator;
+import java.util.Comparator;
 
-public class TestChildEntityComparator extends EntityComparator<TestChildEntity, String> {
+import org.apache.commons.lang3.builder.CompareToBuilder;
+
+public class TestChildEntityComparator implements Comparator<TestChildEntity> {
     @Override
     public int compare(TestChildEntity entity1, TestChildEntity entity2) {
         if (entity1 == entity2) {

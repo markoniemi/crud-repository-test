@@ -2,6 +2,7 @@ package org.survey.repository;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,7 +23,7 @@ public abstract class CrudRepositoryTest<T, ID extends Serializable> {
     protected List<T> savedEntities = new ArrayList<>();
     protected PagingAndSortingRepository<T, ID> entityRepository;
     protected EntityFactory<T, ID> entityFactory;
-    protected EntityComparator<T, ID> entityComparator;
+    protected Comparator<T> entityComparator;
 
     public abstract PagingAndSortingRepository<T, ID> getEntityRepository();
 
