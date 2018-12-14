@@ -139,6 +139,7 @@ public abstract class CrudRepositoryTest<T, ID extends Serializable> {
         }
     }
 
+    @Ignore
     @Test
     public void findByIdWithNonExistentId() {
         save();
