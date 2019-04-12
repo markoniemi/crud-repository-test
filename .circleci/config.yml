@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/crud-repository-test
     docker:
-      - image: circleci/openjdk:8-jdk
+      - image: maven:3.6.0-jdk-8-alpine
     environment:
       MAVEN_OPTS: -Xmx3200m
     steps:
